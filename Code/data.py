@@ -9,7 +9,8 @@ from torch.utils.data import TensorDataset, DataLoader
 
 # Takes the name of the dataset, loads it from the disk and spilt it into training, validation and test datasets.
 def get_loaders(data, data_path, batch_size, val_split=0.1):
-    d_path = Path(data_path) / f"{data}_data.pt"
+    #d_path = Path(data_path) / f"{data}_data.pt"
+    d_path = Path(data_path) / f"{data}.pt"
     data_dict = torch.load(d_path)
 
 # Calculating and setting the data into training and validation     total_samples = data_dict['train_images'].shape[0]
