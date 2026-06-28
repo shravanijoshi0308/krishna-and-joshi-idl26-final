@@ -22,6 +22,12 @@ def get_loaders(data, data_path, batch_size, val_split=0.1):
     val_data = data_dict['train_images'][val_start:]
     val_labels = data_dict['train_labels'][val_start:]
     
+     # Normalization of training data before data feeding.
+    mean = train_data.mean(dim=(0,2,3), keepdim=True)
+    std = train_data.std(dim=(0,2,3), keepdim=True)
+    train_data = (train_data - mean) / std
+    val_data = (val_data - mean) / std
+    test_data = (data_dict['test_images'] - mean) / std
     
     # The data is already split into training and test datasets
     # wrapping them into TensorDataset
