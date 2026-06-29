@@ -6,7 +6,7 @@ MG 6/6/2026
 import torch
 import torch.nn as nn
 
-activation_str = "Identity"  # Placeholder for activation function, can be replaced with "ReLU" or others as needed.
+activation_str = "ReLu"  # Placeholder for activation function, can be replaced with "ReLU" or others as needed.
 
 
 class VGGBlock(nn.Module):
@@ -62,13 +62,11 @@ class ResBlock(nn.Module):
 
 class AlexNet(nn.Module):
     """AlexNet (Krizhevsky et al., 2012) adapted for smaller inputs."""
-    def __init__(self, **kwargs):
+    def __init__(self, drop_rate, in_channels, num_classes, **kwargs):
         super().__init__()
-
-        drop_rate = kwargs.get("drop_rate", 0.5)
         
         self.features = nn.Sequential(
-            nn.Conv2d(3, 48, kernel_size=7, stride=2, padding=3),
+            nn.Conv2d(in_channels, 48, kernel_size=7, stride=2, padding=3),
             nn.BatchNorm2d(48),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
@@ -95,7 +93,7 @@ class AlexNet(nn.Module):
             nn.Dropout(p=drop_rate),
             nn.Linear(1024, 1024),
             nn.ReLU(inplace=True),
-            nn.Linear(1024, 11),
+            nn.Linear(1024, num_classes),
         )
 
     def forward(self, x):
