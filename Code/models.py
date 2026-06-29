@@ -14,15 +14,16 @@ class VGGBlock(nn.Module):
 
     C configuration from Simonyan & Zisserman's VGG paper.
     """
-    def __init__(self, in_channels, out_channels, num_convs, padding=1):
+    def __init__(self, in_channels, out_channels, num_convs):
         super().__init__()
         layers = []
         current_in_channels = in_channels
-        print(f"in_classes is:  {in_channels}")
+        #print(f"in_classes is:  {in_channels}")
         for i in range(num_convs):
             is_config_c_tail = (num_convs == 3 and i == 2)
             kernel_size = 1 if is_config_c_tail else 3
-            layers.append(nn.Conv2d(current_in_channels, out_channels, kernel_size=kernel_size, padding=padding))
+            padding_size = 0 if is_config_c_tail else 1
+            layers.append(nn.Conv2d(current_in_channels, out_channels, kernel_size=kernel_size, padding=padding_size))
             current_in_channels = out_channels #  reused original in_channels instead of updating to out_channels after first conv
             layers.append(nn.BatchNorm2d(out_channels))
             layers.append(nn.ReLU(inplace=True))
@@ -67,6 +68,8 @@ class AlexNet(nn.Module):
     def __init__(self, drop_rate, in_channels, num_classes, **kwargs):
         super().__init__()
         
+        #drop_rate = kwargs.get("drop_rate", 0.5)
+
         self.features = nn.Sequential(
             nn.Conv2d(in_channels, 48, kernel_size=7, stride=2, padding=3),
             nn.BatchNorm2d(48),
@@ -123,8 +126,8 @@ class VGG16(nn.Module):
         )
         
         self.classifier = nn.Sequential(
-            #nn.Linear(2048, 1024), flatten size (2048->4608) 
-            nn.Linear(4608, 1024),
+            nn.Linear(2048, 1024),
+            # After padding fix the output is correct nn.Linear(4608, 1024),
             nn.ReLU(inplace=True),
             nn.Dropout(p=drop_rate),
             nn.Linear(1024, 512),
@@ -136,7 +139,9 @@ class VGG16(nn.Module):
     def forward(self, x):
         x = self.features(x)
         x = torch.flatten(x, 1)
+        print(x.shape)
         return self.classifier(x)
+       
 
 
 class ResNet18(nn.Module):
