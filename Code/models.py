@@ -124,9 +124,11 @@ class VGG16(nn.Module):
             VGGBlock(256, 512, num_convs=3),
             VGGBlock(512, 512, num_convs=3)
         )
-        
+
+        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.classifier = nn.Sequential(
-            nn.Linear(2048, 1024),
+            nn.Linear(512, 1024),
+            # After AdaptiveAvgPool2d the first layer is forced to be 512 nn.Linear(2048, 1024),
             # After padding fix the output is correct nn.Linear(4608, 1024),
             nn.ReLU(inplace=True),
             nn.Dropout(p=drop_rate),
@@ -138,6 +140,7 @@ class VGG16(nn.Module):
 
     def forward(self, x):
         x = self.features(x)
+        x = self.avgpool(x)
         x = torch.flatten(x, 1)
         print(x.shape)
         return self.classifier(x)
@@ -146,7 +149,6 @@ class VGG16(nn.Module):
 
 class ResNet18(nn.Module):
     """ResNet18 (He et al., 2016) adapted for smaller inputs.
-    
     activation - flexible activation function to allow experimentation (e.g., ReLU, LeakyReLU, etc.)
     """
     def __init__(self, in_channels, num_classes, **kwargs):
