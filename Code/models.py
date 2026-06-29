@@ -18,10 +18,12 @@ class VGGBlock(nn.Module):
         super().__init__()
         layers = []
         current_in_channels = in_channels
+        print(f"in_classes is:  {in_channels}")
         for i in range(num_convs):
             is_config_c_tail = (num_convs == 3 and i == 2)
             kernel_size = 1 if is_config_c_tail else 3
             layers.append(nn.Conv2d(current_in_channels, out_channels, kernel_size=kernel_size, padding=padding))
+            current_in_channels = out_channels #  reused original in_channels instead of updating to out_channels after first conv
             layers.append(nn.BatchNorm2d(out_channels))
             layers.append(nn.ReLU(inplace=True))
             
@@ -84,10 +86,11 @@ class AlexNet(nn.Module):
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
         )
+
         
         self.classifier = nn.Sequential(
             nn.Dropout(p=drop_rate),
-            #nn.Linear(2048, 1024),
+            #nn.Linear(2048, 1024), flatten size (2048->3072) 
             nn.Linear(3072, 1024),
             nn.ReLU(inplace=True),
             nn.Dropout(p=drop_rate),
@@ -95,6 +98,7 @@ class AlexNet(nn.Module):
             nn.ReLU(inplace=True),
             nn.Linear(1024, num_classes),
         )
+    
 
     def forward(self, x):
         x = self.features(x)
@@ -104,10 +108,11 @@ class AlexNet(nn.Module):
 
 class VGG16(nn.Module):
     """VGG16 in C configuration of Simonyan & Zisserman, (2014) adapted for smaller inputs."""
-    def __init__(self, in_channels, num_classes, **kwargs):
+    def __init__(self, drop_rate, in_channels, num_classes, **kwargs):
         super().__init__()
 
-        drop_rate = kwargs.get("drop_rate", 0.5)
+        #Removing drop_rate from here and made drop_rate a required parameter in VGG16 instead of kwargs fallback
+        # drop_rate = kwargs.get("drop_rate", 0.5)
 
         self.features = nn.Sequential(
             VGGBlock(in_channels, 64, num_convs=2),
@@ -118,7 +123,8 @@ class VGG16(nn.Module):
         )
         
         self.classifier = nn.Sequential(
-            nn.Linear(2048, 1024),
+            #nn.Linear(2048, 1024), flatten size (2048->4608) 
+            nn.Linear(4608, 1024),
             nn.ReLU(inplace=True),
             nn.Dropout(p=drop_rate),
             nn.Linear(1024, 512),
