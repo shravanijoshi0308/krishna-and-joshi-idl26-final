@@ -38,11 +38,11 @@ for data in DATASET_CONFIG:
         train_loader, val_loader, test_loader = get_loaders(data=data,data_path=DATA_PATH,batch_size=BATCH_SIZE)
         model_class = getattr(models,model)
         model_name = model_class(in_channels=DATASET_CONFIG[data]["CHANNELS"],num_classes=DATASET_CONFIG[data]["NUM_CLASSES"],drop_rate=DROPOUT_RATE,activation_str=ACTIVATION_STR).to(device)
-        duration = time.time() - start
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(model_name.parameters(), lr=LEARNING_RATE)
         trainer = Trainer(model_name, criterion, optimizer, device)
         trainer.fit(train_loader, val_loader, epochs=EPOCHS)
+        duration = time.time() - start
         test_loss, test_acc, test_precision, test_recall, test_f1 = trainer.evaluate(test_loader)
         results.append({
         "model_name": model,
