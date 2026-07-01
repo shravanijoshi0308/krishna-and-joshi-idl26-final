@@ -192,8 +192,9 @@ class ResNet18(nn.Module):
         return self.classifier(out)
     
 class GreenNet(nn.Module):
-     """GreenNet - Its a custom model designed for effectient performace"""
-     def __init__(self, in_channels, num_classes):
+     """GreenNet - Its a custom model designed for Green Initiative."""
+
+     def __init__(self, in_channels, num_classes, **kwargs):
         super().__init__()
 
         self.features = nn.Sequential(
