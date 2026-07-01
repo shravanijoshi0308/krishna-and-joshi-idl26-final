@@ -142,7 +142,7 @@ class VGG16(nn.Module):
         x = self.features(x)
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
-        print(x.shape)
+        #print(x.shape)
         return self.classifier(x)
        
 

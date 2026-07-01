@@ -58,6 +58,7 @@ class Trainer:
                 _, predicted = outputs.max(1)
                 total += labels.size(0)
                 correct += predicted.eq(labels).sum().item()
+                # extending evaluate() to return precision, recall and macro F1  
                 all_prediction.extend(predicted.cpu().numpy())
                 all_labels.extend(labels.cpu().numpy())
             precision = precision_score(all_labels, all_prediction, average='macro', zero_division=0)
