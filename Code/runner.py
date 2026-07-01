@@ -20,7 +20,7 @@ DATASET_CONFIG = {
     "orgs":    {"CHANNELS": 1, "NUM_CLASSES": 11},
 }
 
-MODEL_SET = ["AlexNet", "VGG16", "ResNet18"]
+MODEL_SET = ["AlexNet", "VGG16", "ResNet18", "GreenNet"]
  
 DATA_PATH = "Data"
 BATCH_SIZE = 32
