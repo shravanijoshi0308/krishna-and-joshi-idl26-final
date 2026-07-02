@@ -7,7 +7,6 @@ from data import get_loaders
 import models
 from fit import Trainer
 import time 
-torch.manual_seed(42)
 
 device = torch.device("mps" if torch.backends.mps.is_available()
                       else "cuda" 
