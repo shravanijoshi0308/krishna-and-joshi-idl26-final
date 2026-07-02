@@ -45,19 +45,25 @@ for data in DATASET_CONFIG:
         trainer.fit(train_loader, val_loader, epochs=EPOCHS)
         duration = time.time() - start
         train_memory = torch.cuda.max_memory_allocated() / (1024**2) 
+        #torch.cuda.synchronize()  
+        #stop_watch = time.time()
+        #test_loss, test_acc, test_precision, test_recall, test_f1 = trainer.evaluate(test_loader)
+        #torch.cuda.synchronize() 
+        #stop_watch = time.time() - stop_watch
+        #latency_per_sample = (stop_watch / len(test_loader.dataset)) * 1000
         torch.cuda.synchronize()  
         stop_watch = time.time()
-        test_loss, test_acc, test_precision, test_recall, test_f1 = trainer.evaluate(test_loader)
+        val_loss, val_acc, val_precision, val_recall, val_f1 = trainer.evaluate(val_loader)
         torch.cuda.synchronize() 
         stop_watch = time.time() - stop_watch
-        latency_per_sample = (stop_watch / len(test_loader.dataset)) * 1000
+        latency_per_sample = (stop_watch / len(val_loader.dataset)) * 1000
         results.append({
         "model_name": model,
         "dataset": data,
-        "test_acc": test_acc,
-        "precision": test_precision,
-        "recall": test_recall,
-        "f1": test_f1,
+        "val_acc": val_acc,
+        "precision": val_precision,
+        "recall": val_recall,
+        "f1": val_f1,
         "duration": duration,
         "memory_mb": train_memory,
         "latency_ms": latency_per_sample})
