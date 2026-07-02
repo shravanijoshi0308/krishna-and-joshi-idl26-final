@@ -7,6 +7,7 @@ from data import get_loaders
 import models
 from fit import Trainer
 import time 
+torch.manual_seed(42)
 
 device = torch.device("mps" if torch.backends.mps.is_available()
                       else "cuda" 
@@ -33,6 +34,7 @@ results = []
 
 for data in DATASET_CONFIG:
     for model in MODEL_SET:
+        torch.cuda.reset_peak_memory_stats()
         print(f"\n=== {model} on {data} ===")
         start = time.time()
         train_loader, val_loader, test_loader = get_loaders(data=data,data_path=DATA_PATH,batch_size=BATCH_SIZE)
@@ -43,7 +45,13 @@ for data in DATASET_CONFIG:
         trainer = Trainer(model_name, criterion, optimizer, device)
         trainer.fit(train_loader, val_loader, epochs=EPOCHS)
         duration = time.time() - start
+        train_memory = torch.cuda.max_memory_allocated() / (1024**2) 
+        torch.cuda.synchronize()  
+        stop_watch = time.time()
         test_loss, test_acc, test_precision, test_recall, test_f1 = trainer.evaluate(test_loader)
+        torch.cuda.synchronize() 
+        stop_watch = time.time() - stop_watch
+        latency_per_sample = (stop_watch / len(test_loader.dataset)) * 1000
         results.append({
         "model_name": model,
         "dataset": data,
@@ -51,7 +59,9 @@ for data in DATASET_CONFIG:
         "precision": test_precision,
         "recall": test_recall,
         "f1": test_f1,
-        "duration": duration})
+        "duration": duration,
+        "memory_mb": train_memory,
+        "latency_ms": latency_per_sample})
 
 print("\n" + "="*50)
 print("FINAL RESULTS SUMMARY")
@@ -62,4 +72,6 @@ for r in results:
           f"P: {r['precision']:.4f} | "
           f"R: {r['recall']:.4f} | "
           f"F1: {r['f1']:.4f} | "
-          f"Time: {r['duration']:.1f}s")
+          f"Time: {r['duration']:.1f} |"
+          f"Memory: {r['memory_mb']:.1f}MB | "
+          f"Latency: {r['latency_ms']:.3f}ms/sample")
