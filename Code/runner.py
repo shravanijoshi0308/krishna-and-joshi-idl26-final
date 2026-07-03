@@ -73,7 +73,6 @@ print("FINAL RESULTS SUMMARY")
 print("="*50)
 for r in results:
     print(f"{r['model_name']} on {r['dataset']} | "
-          f"Acc: {r['test_acc']:.2f}% | "
           f"P: {r['precision']:.4f} | "
           f"R: {r['recall']:.4f} | "
           f"F1: {r['f1']:.4f} | "
