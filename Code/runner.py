@@ -73,9 +73,10 @@ print("FINAL RESULTS SUMMARY")
 print("="*50)
 for r in results:
     print(f"{r['model_name']} on {r['dataset']} | "
+          f"Val Acc: {r['val_acc']:.2f}% | "
           f"P: {r['precision']:.4f} | "
           f"R: {r['recall']:.4f} | "
           f"F1: {r['f1']:.4f} | "
-          f"Time: {r['duration']:.1f} |"
+          f"Time: {r['duration']:.1f}s | "
           f"Memory: {r['memory_mb']:.1f}MB | "
           f"Latency: {r['latency_ms']:.3f}ms/sample")
