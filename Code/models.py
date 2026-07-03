@@ -198,12 +198,12 @@ class GreenNet(nn.Module):
         super().__init__()
 
         self.features = nn.Sequential(
-            nn.Conv2d(in_channels, 32, kernel_size=7, stride=2, padding=3),
+            nn.Conv2d(in_channels, 32, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(32),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
             
-            nn.Conv2d(32, 64, kernel_size=5, padding=2),
+            nn.Conv2d(32, 64, kernel_size=3, padding=2),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
