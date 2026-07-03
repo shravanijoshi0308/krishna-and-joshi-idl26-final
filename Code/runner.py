@@ -43,6 +43,7 @@ for data in DATASET_CONFIG:
         optimizer = optim.Adam(model_name.parameters(), lr=LEARNING_RATE)
         trainer = Trainer(model_name, criterion, optimizer, device)
         trainer.fit(train_loader, val_loader, epochs=EPOCHS)
+        train_loss, train_acc, _, _, _ = trainer.evaluate(train_loader)
         duration = time.time() - start
         train_memory = torch.cuda.max_memory_allocated() / (1024**2) 
         #torch.cuda.synchronize()  
@@ -60,6 +61,7 @@ for data in DATASET_CONFIG:
         results.append({
         "model_name": model,
         "dataset": data,
+        "train_acc": train_acc, 
         "val_acc": val_acc,
         "precision": val_precision,
         "recall": val_recall,
@@ -73,9 +75,10 @@ print("FINAL RESULTS SUMMARY")
 print("="*50)
 for r in results:
     print(f"{r['model_name']} on {r['dataset']} | "
+          f"Train Acc: {r['train_acc']:.2f}% | " 
           f"Val Acc: {r['val_acc']:.2f}% | "
-          f"P: {r['precision']:.4f} | "
-          f"R: {r['recall']:.4f} | "
+          f"Precision: {r['precision']:.4f} | "
+          f"Recall: {r['recall']:.4f} | "
           f"F1: {r['f1']:.4f} | "
           f"Time: {r['duration']:.1f}s | "
           f"Memory: {r['memory_mb']:.1f}MB | "
