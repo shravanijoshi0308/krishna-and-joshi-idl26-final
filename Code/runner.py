@@ -1,4 +1,4 @@
-"""This file runs the """
+"""This file runs all model/dataset combinations for the official benchmark."""
 
 import torch
 import torch.nn as nn
@@ -43,6 +43,7 @@ for data in DATASET_CONFIG:
         optimizer = optim.Adam(model_name.parameters(), lr=LEARNING_RATE)
         trainer = Trainer(model_name, criterion, optimizer, device)
         trainer.fit(train_loader, val_loader, epochs=EPOCHS)
+        torch.save(model_name.state_dict(), f"{model}_{data}.pth")
         train_loss, train_acc, _, _, _ = trainer.evaluate(train_loader)
         duration = time.time() - start
         train_memory = torch.cuda.max_memory_allocated() / (1024**2) 
@@ -52,20 +53,14 @@ for data in DATASET_CONFIG:
         torch.cuda.synchronize() 
         stop_watch = time.time() - stop_watch
         latency_per_sample = (stop_watch / len(test_loader.dataset)) * 1000
-        torch.cuda.synchronize()  
-        stop_watch = time.time()
-        val_loss, val_acc, val_precision, val_recall, val_f1 = trainer.evaluate(val_loader)
-        torch.cuda.synchronize() 
-        stop_watch = time.time() - stop_watch
-        latency_per_sample = (stop_watch / len(val_loader.dataset)) * 1000
         results.append({
         "model_name": model,
         "dataset": data,
         "train_acc": train_acc, 
-        "val_acc": val_acc,
-        "precision": val_precision,
-        "recall": val_recall,
-        "f1": val_f1,
+        "test_acc": test_acc,
+        "precision": test_precision,
+        "recall": test_recall,
+        "f1": test_f1,
         "duration": duration,
         "memory_mb": train_memory,
         "latency_ms": latency_per_sample})
@@ -76,7 +71,7 @@ print("="*50)
 for r in results:
     print(f"{r['model_name']} on {r['dataset']} | "
           f"Train Acc: {r['train_acc']:.2f}% | " 
-          f"Val Acc: {r['val_acc']:.2f}% | "
+          f"Test Acc: {r['test_acc']:.2f}% | "
           f"Precision: {r['precision']:.4f} | "
           f"Recall: {r['recall']:.4f} | "
           f"F1: {r['f1']:.4f} | "
