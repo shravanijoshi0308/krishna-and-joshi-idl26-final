@@ -46,12 +46,12 @@ for data in DATASET_CONFIG:
         train_loss, train_acc, _, _, _ = trainer.evaluate(train_loader)
         duration = time.time() - start
         train_memory = torch.cuda.max_memory_allocated() / (1024**2) 
-        #torch.cuda.synchronize()  
-        #stop_watch = time.time()
-        #test_loss, test_acc, test_precision, test_recall, test_f1 = trainer.evaluate(test_loader)
-        #torch.cuda.synchronize() 
-        #stop_watch = time.time() - stop_watch
-        #latency_per_sample = (stop_watch / len(test_loader.dataset)) * 1000
+        torch.cuda.synchronize()  
+        stop_watch = time.time()
+        test_loss, test_acc, test_precision, test_recall, test_f1 = trainer.evaluate(test_loader)
+        torch.cuda.synchronize() 
+        stop_watch = time.time() - stop_watch
+        latency_per_sample = (stop_watch / len(test_loader.dataset)) * 1000
         torch.cuda.synchronize()  
         stop_watch = time.time()
         val_loss, val_acc, val_precision, val_recall, val_f1 = trainer.evaluate(val_loader)
