@@ -1,7 +1,7 @@
 {
     "DATA": "cells",
     "DATA_PATH": "Data",
-    "MODEL": "AlexNet",
+    "MODEL": "VGG16",
     "CHANNELS": 3,
     "NUM_CLASSES": 8,
     "BATCH_SIZE": 32,
