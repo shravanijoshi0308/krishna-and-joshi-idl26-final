@@ -15,11 +15,17 @@ def get_loaders(data, data_path, batch_size, val_split=0.1):
     val_size = int(total_samples * val_split)
     val_start = total_samples - val_size
     
-    #slice to exclude validation data (was previously using full dataset - data leakage)
+    # 1: Slice to exclude validation data (was previously using full dataset - data leakage)
     train_data = data_dict['train_images'][:val_start]
     train_labels = data_dict['train_labels'][:val_start]
     val_data = data_dict['train_images'][val_start:]
     val_labels = data_dict['train_labels'][val_start:]
+
+    # 2: Normalization of training data before data feeding.
+    mean = train_data.mean(dim=(0,2,3), keepdim=True)
+    std = train_data.std(dim=(0,2,3), keepdim=True)
+    train_data = (train_data - mean) / std
+    val_data = (val_data - mean) / std
     
     train_dataset = TensorDataset(train_data, train_labels)
     val_dataset = TensorDataset(val_data, val_labels)
