@@ -125,4 +125,4 @@ This runs the experiment in the scarce organs datasets(500 samples) :
 Results are printed as benchmarking matrix comparing both approaches against the minimum accuracy target. 
 
 
-"Acknowledgment: Thanks to Prof. Dr. Magda Gregorová for the lecture materials and guidance referenced throughout this project."
+*Acknowledgment:* Thanks to `Prof. Dr. Magda Gregorová` for the lecture materials and guidance referenced throughout this project."
