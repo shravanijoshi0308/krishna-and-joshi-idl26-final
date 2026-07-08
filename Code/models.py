@@ -24,7 +24,8 @@ class VGGBlock(nn.Module):
             layers.append(nn.Conv2d(current_in_channels, out_channels, kernel_size=kernel_size, padding=padding))
             layers.append(nn.BatchNorm2d(out_channels))
             layers.append(nn.ReLU(inplace=True))
-            
+            # 11 : update channel count for next conv layer.
+            current_in_channels = out_channels
         layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
         self.block = nn.Sequential(*layers)
 
