@@ -129,3 +129,43 @@ These were found during the audit but left unfixed due to time constraints rathe
 - **`test_labels` squeeze** (`data.py`) — same `[N,1]`→`[N]` fix as Bug 4, deferred until the test-evaluation step is built, since `test_labels` isn't used anywhere yet.
 - **Model saving** (`train.py`) — no `torch.save(...)` call exists anywhere; trained weights are not persisted after a run.
 - **Test-set evaluation** (`train.py`) — `test_loader` is built by `get_loaders()` but immediately discarded (`_`); no code currently computes accuracy/precision/recall/F1 on the test set, which is what the assignment's accuracy targets are actually measured against.
+
+
+FINAL RESULTS SUMMARY
+==================================================
+AlexNet on cells | Acc: 95.41% | P: 0.9541 | R: 0.9464 | F1: 0.9486 | Time: 26.0s
+VGG16 on cells | Acc: 96.55% | P: 0.9600 | R: 0.9642 | F1: 0.9614 | Time: 69.8s
+ResNet18 on cells | Acc: 96.49% | P: 0.9569 | R: 0.9620 | F1: 0.9584 | Time: 135.2s
+AlexNet on chest | Acc: 82.85% | P: 0.8828 | R: 0.7739 | F1: 0.7935 | Time: 8.5s
+VGG16 on chest | Acc: 89.26% | P: 0.9267 | R: 0.8568 | F1: 0.8769 | Time: 25.7s
+ResNet18 on chest | Acc: 87.50% | P: 0.8993 | R: 0.8402 | F1: 0.8576 | Time: 50.8s
+AlexNet on lesions | Acc: 76.86% | P: 0.5044 | R: 0.5021 | F1: 0.4766 | Time: 15.5s
+VGG16 on lesions | Acc: 78.05% | P: 0.5207 | R: 0.5188 | F1: 0.4922 | Time: 40.8s
+ResNet18 on lesions | Acc: 73.77% | P: 0.5469 | R: 0.5447 | F1: 0.4672 | Time: 79.4s
+AlexNet on orgs | Acc: 89.72% | P: 0.8876 | R: 0.8886 | F1: 0.8873 | Time: 23.6s
+VGG16 on orgs | Acc: 92.09% | P: 0.9090 | R: 0.9131 | F1: 0.9096 | Time: 74.0s
+ResNet18 on orgs | Acc: 92.22% | P: 0.9147 | R: 0.9136 | F1: 0.9130 | Time: 152.9s
+
+
+on mps 
+
+==================================================
+FINAL RESULTS SUMMARY
+==================================================
+AlexNet on cells | Train Acc: 94.31% | Test Acc: 93.54% | Precision: 0.9315 | Recall: 0.9222 | F1: 0.9250 | Time: 32.1s | Memory: 0.0MB | Latency: 0.455ms/sample
+VGG16 on cells | Train Acc: 98.07% | Test Acc: 97.46% | Precision: 0.9783 | Recall: 0.9725 | F1: 0.9748 | Time: 166.7s | Memory: 0.0MB | Latency: 1.178ms/sample
+ResNet18 on cells | Train Acc: 90.80% | Test Acc: 91.00% | Precision: 0.9454 | Recall: 0.9034 | F1: 0.9163 | Time: 449.9s | Memory: 0.0MB | Latency: 2.837ms/sample
+GreenNet on cells | Train Acc: 88.21% | Test Acc: 88.19% | Precision: 0.8750 | Recall: 0.8630 | F1: 0.8677 | Time: 22.8s | Memory: 0.0MB | Latency: 0.080ms/sample
+AlexNet on chest | Train Acc: 91.21% | Test Acc: 71.15% | Precision: 0.8421 | Recall: 0.6154 | F1: 0.5938 | Time: 14.6s | Memory: 0.0MB | Latency: 0.209ms/sample
+VGG16 on chest | Train Acc: 97.69% | Test Acc: 88.62% | Precision: 0.9035 | Recall: 0.8568 | F1: 0.8721 | Time: 72.4s | Memory: 0.0MB | Latency: 1.857ms/sample
+ResNet18 on chest | Train Acc: 99.53% | Test Acc: 81.89% | Precision: 0.8744 | Recall: 0.7620 | F1: 0.7805 | Time: 178.1s | Memory: 0.0MB | Latency: 2.761ms/sample
+GreenNet on chest | Train Acc: 89.11% | Test Acc: 71.96% | Precision: 0.8166 | Recall: 0.6295 | F1: 0.6169 | Time: 7.3s | Memory: 0.0MB | Latency: 0.187ms/sample
+AlexNet on lesions | Train Acc: 72.80% | Test Acc: 71.12% | Precision: 0.3588 | Recall: 0.3443 | F1: 0.3110 | Time: 23.9s | Memory: 0.0MB | Latency: 0.243ms/sample
+VGG16 on lesions | Train Acc: 69.41% | Test Acc: 68.08% | Precision: 0.3169 | Recall: 0.3388 | F1: 0.3064 | Time: 264.0s | Memory: 0.0MB | Latency: 0.872ms/sample
+ResNet18 on lesions | Train Acc: 73.96% | Test Acc: 71.82% | Precision: 0.4882 | Recall: 0.4290 | F1: 0.4336 | Time: 236.5s | Memory: 0.0MB | Latency: 2.709ms/sample
+GreenNet on lesions | Train Acc: 70.07% | Test Acc: 70.17% | Precision: 0.3646 | Recall: 0.2729 | F1: 0.2753 | Time: 12.0s | Memory: 0.0MB | Latency: 0.247ms/sample
+AlexNet on orgs | Train Acc: 94.00% | Test Acc: 88.05% | Precision: 0.8658 | Recall: 0.8672 | F1: 0.8642 | Time: 2983.7s | Memory: 0.0MB | Latency: 0.431ms/sample
+VGG16 on orgs | Train Acc: 96.49% | Test Acc: 90.13% | Precision: 0.8903 | Recall: 0.8959 | F1: 0.8894 | Time: 1987.8s | Memory: 0.0MB | Latency: 0.859ms/sample
+ResNet18 on orgs | Train Acc: 97.27% | Test Acc: 90.03% | Precision: 0.8922 | Recall: 0.8873 | F1: 0.8858 | Time: 405.5s | Memory: 0.0MB | Latency: 2.654ms/sample
+GreenNet on orgs | Train Acc: 83.60% | Test Acc: 78.40% | Precision: 0.7607 | Recall: 0.7423 | F1: 0.7487 | Time: 17.4s | Memory: 0.0MB | Latency: 0.191ms/sample
+(.venv311) shravanijoshi@Shravanis-MacBook-Air Code % python3 pretraining.py 
