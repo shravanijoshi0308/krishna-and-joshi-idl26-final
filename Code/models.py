@@ -6,7 +6,7 @@ MG 6/6/2026
 import torch
 import torch.nn as nn
 
-activation_str = "Identity"  # Placeholder for activation function, can be replaced with "ReLU" or others as needed.
+activation_str = "ReLU"  # Placeholder for activation function, can be replaced with "ReLU" or others as needed.
 
 
 class VGGBlock(nn.Module):
@@ -14,14 +14,16 @@ class VGGBlock(nn.Module):
 
     C configuration from Simonyan & Zisserman's VGG paper.
     """
-    def __init__(self, in_channels, out_channels, num_convs, padding=1):
+    def __init__(self, in_channels, out_channels, num_convs):
         super().__init__()
         layers = []
         current_in_channels = in_channels
         for i in range(num_convs):
             is_config_c_tail = (num_convs == 3 and i == 2)
             kernel_size = 1 if is_config_c_tail else 3
-            layers.append(nn.Conv2d(current_in_channels, out_channels, kernel_size=kernel_size, padding=padding))
+            # 12 : padding was fixed at 1 for all kernels; 1x1 convs need padding=0 to preserve size.
+            padding_size = 0 if is_config_c_tail else 1
+            layers.append(nn.Conv2d(current_in_channels, out_channels, kernel_size=kernel_size, padding=padding_size))
             layers.append(nn.BatchNorm2d(out_channels))
             layers.append(nn.ReLU(inplace=True))
             # 11 : update channel count for next conv layer.
