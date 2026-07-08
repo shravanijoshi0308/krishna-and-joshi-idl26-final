@@ -25,7 +25,7 @@ MODEL_SET = ["AlexNet", "VGG16", "ResNet18", "GreenNet"]
 DATA_PATH = "Data"
 BATCH_SIZE = 32
 LEARNING_RATE = 0.0001
-EPOCHS = 3
+EPOCHS = 10
 ACTIVATION_STR = "ReLU"
 
 results = []
