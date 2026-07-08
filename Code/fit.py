@@ -80,3 +80,15 @@ class Trainer:
         
         print("-" * 50)
         print("Training Complete!")
+
+# Created test function for test evaluation on test set 
+    def test(self, test_loader):
+        test_loss, test_acc, test_precision, test_recall, test_f1 = self.evaluate(test_loader)
+        print("\nTest Results")
+        print("-" * 50)
+        print(f"Test Loss: {test_loss:.4f}")
+        print(f"Test Accuracy: {test_acc:.2f}%")
+        print(f"Test Precision: {test_precision:.4f}")
+        print(f"Test Recall: {test_recall:.4f}")
+        print(f"Test F1: {test_f1:.4f}")
+        return test_loss, test_acc, test_precision, test_recall, test_f1
