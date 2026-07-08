@@ -7,6 +7,8 @@ from data import get_loaders
 from fit import Trainer
 import models
 
+torch.manual_seed(42)
+
 device = torch.device("mps" if torch.backends.mps.is_available() else "cuda" if torch.cuda.is_available() else "cpu")   
 print(f"Training executing on device: {device}")
 
@@ -46,7 +48,6 @@ trainer_transfer.fit(train_loader, val_loader, epochs=10)
 test_loss_t, test_acc_t, test_precision_t, test_recall_t, test_f1_t = trainer_transfer.evaluate(test_loader)
 print(f"Transfer Test Results | Loss: {test_loss_t:.4f} | Acc: {test_acc_t:.2f}% | Precision: {test_precision_t:.4f} | Recall: {test_recall_t:.4f} | F1: {test_f1_t:.4f}")
 
-# Track results in a structured matrix, matching the runner pattern from Parts 1 & 2
 results = []
 results.append({
     "experiment": "Scratch",
@@ -74,4 +75,6 @@ for r in results:
 
 improvement = results[1]['test_acc'] - results[0]['test_acc']
 print(f"\nImprovement from transfer learning: +{improvement:.2f}% accuracy")
-print(f"Both experiments {'meet' if all(r['test_acc'] >= 40 for r in results) else 'do NOT meet'} the 40% minimum target.")
+for r in results:
+    status = "meets" if r['test_acc'] >= 40 else "does NOT meet"
+    print(f"{r['experiment']}: {r['test_acc']:.2f}% — {status} the 40% minimum target.")
