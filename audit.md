@@ -1,6 +1,6 @@
 # AUDIT_LOG.md — Operation Cyber-Histology Incident Audit
 
-**Team:** Krishna Kapoor & Shravani Joshi (10012627)
+**Team:** Krishna Kapoor `10012546` & Shravani Joshi (10012627)
 **Course:** MAI/IDL SS26, THWS Würzburg-Schweinfurt
 **Repository:** krishna-and-joshi-idl26-final
 **Branch:** final_changes_by_Krishna_&_Joshi
