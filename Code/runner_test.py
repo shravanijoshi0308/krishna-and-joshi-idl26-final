@@ -84,17 +84,3 @@ for r in results:
           f"Time: {r['duration']:.1f}s | "
           f"Memory: {r['memory_mb']:.1f}MB | "
           f"Latency: {r['latency_ms']:.3f}ms/sample")
-# Final Summary Results
-print("\n" + "="*50)
-print("FINAL RESULTS SUMMARY")
-print("="*50)
-for r in results:
-    print(f"{r['model_name']} on {r['dataset']} | "
-          f"Precision: {r['precision']:.4f} | "
-          f"Recall: {r['recall']:.4f} | "
-          f"Test Loss: {r['test_loss']:.4f} | "
-          f"Test Acc: {r['test_acc']:.2f}% | "
-          f"F1: {r['f1']:.4f} | "
-          f"Time: {r['duration']:.1f}s |"
-          f"Memory: {r['memory_mb']:.1f}MB | "
-          f"Latency: {r['latency_ms']:.3f}ms/sample")
