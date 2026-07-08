@@ -22,6 +22,8 @@ def get_loaders(data, data_path, batch_size, val_split=0.1):
     train_labels = torch.squeeze(data_dict['train_labels'])[:val_start]
     val_data = data_dict['train_images'][val_start:]
     val_labels = torch.squeeze(data_dict['train_labels'])[val_start:]
+    # 14: Added squeeze to return 0d or 1d tensor which resolves runtime errors
+    test_labels = torch.squeeze(data_dict['test_labels'])
 
     # 2: Normalization of training data before data feeding.
     mean = train_data.mean(dim=(0,2,3), keepdim=True)
@@ -33,7 +35,7 @@ def get_loaders(data, data_path, batch_size, val_split=0.1):
     train_dataset = TensorDataset(train_data, train_labels)
     val_dataset = TensorDataset(val_data, val_labels)
     # 3: Using test_data which was normalized above
-    test_dataset = TensorDataset(test_data, data_dict['test_labels'])   
+    test_dataset = TensorDataset(test_data, test_labels)   
     
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size, shuffle=False)
