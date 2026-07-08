@@ -26,10 +26,12 @@ def get_loaders(data, data_path, batch_size, val_split=0.1):
     std = train_data.std(dim=(0,2,3), keepdim=True)
     train_data = (train_data - mean) / std
     val_data = (val_data - mean) / std
+    test_data = (data_dict['test_images'] - mean) / std
     
     train_dataset = TensorDataset(train_data, train_labels)
     val_dataset = TensorDataset(val_data, val_labels)
-    test_dataset = TensorDataset(data_dict['test_images'], data_dict['test_labels'])
+    # 3: Using test_data which was normalized above
+    test_dataset = TensorDataset(test_data, data_dict['test_labels'])   
     
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size, shuffle=False)
