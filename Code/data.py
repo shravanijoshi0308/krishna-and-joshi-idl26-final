@@ -17,10 +17,11 @@ def get_loaders(data, data_path, batch_size, val_split=0.1):
     val_start = total_samples - val_size
     
     # 1: Slice to exclude validation data (was previously using full dataset - data leakage)
-    train_data = data_dict['train_images'][:val_start]
+    # 10: labels were [N,1] instead of [N], causing CrossEntropyLoss to reject them.
+    train_labels = torch.squeeze(data_dict['train_labels'])[:val_start]
     train_labels = data_dict['train_labels'][:val_start]
     val_data = data_dict['train_images'][val_start:]
-    val_labels = data_dict['train_labels'][val_start:]
+    val_labels = torch.squeeze(data_dict['train_labels'])[val_start:]
 
     # 2: Normalization of training data before data feeding.
     mean = train_data.mean(dim=(0,2,3), keepdim=True)
