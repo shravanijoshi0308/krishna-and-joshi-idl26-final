@@ -136,6 +136,7 @@ class VGG16(nn.Module):
 
     def forward(self, x):
         x = self.features(x)
+        #added missing GAP layer to VGG16.
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
         return self.classifier(x)
@@ -186,3 +187,33 @@ class ResNet18(nn.Module):
         out = torch.flatten(out, 1)
         # 13: return was missing 
         return self.classifier(out)
+    
+class GreenNet(nn.Module):
+     """GreenNet - Its a custom model designed for Green Initiative."""
+
+     def __init__(self, in_channels, num_classes, **kwargs):
+        super().__init__()
+
+        self.features = nn.Sequential(
+            nn.Conv2d(in_channels, 32, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
+            
+            nn.Conv2d(32, 64, kernel_size=3, padding=2),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
+            
+            nn.Conv2d(64, 128, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
+        )
+        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+        self.classifier = nn.Linear(128, num_classes)
+
+     def forward(self, x):
+        x = self.features(x)
+        x = self.avgpool(x)     
+        x = torch.flatten(x, 1)
+        return self.classifier(x)
