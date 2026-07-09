@@ -1,0 +1,8 @@
+.venv311/
+Data/
+venv/
+__pycache__/
+*.pt
+*.pth
+.DS_Store 
+errors.md
