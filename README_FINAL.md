@@ -28,7 +28,7 @@ krishna-and-joshi-idl26-final/
 │   ├── models.py          # Model architectures : AlexNet, VGG16, ResNet18, GreenNet 
 │   ├── fit.py             # Trainer class (train_one_epoch, evaluate, fit)
 │   ├── train.py           # Single run entry point, driven by config.json
-│   ├── runner.py          # Automated runner 
+│   ├── runner_test.py          # Automated runner 
 │   ├── pretraining.py     # Part 3: transfer learning (scratch vs. transfer)
 │   ├── config.json        # Configuration for single train.py runs
 │   └── Data/              # Dataset 
@@ -107,7 +107,7 @@ This trains one model for one dataset and prints training and validation metrics
 ##### Automated benchmark for all models x all datasets 
 ```bash
 cd Code
-python3 runner.py
+python3 runner_test.py
 ```
 
 This loops through all 4 models on all 4 datasets by training and evaluating each combination automatically. It generates a final summary tabke including test accuracy, precision, recall, peak memory consumption, training duration and inference latency per sample.This summary is used for both the main benchmark (part 1) and the Green Initiative efficiency comparison(part 2).
